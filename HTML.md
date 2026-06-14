@@ -1,38 +1,49 @@
 \documentclass[12pt,a4paper]{article}
 
-% حزم دعم اللغة العربية والخطوط
+% حزم دعم اللغة العربية والخطوط (تجميع باستخدام XeLaTeX)
 \usepackage{fontspec}
 \usepackage{polyglossia}
 \setmainlanguage{arabic}
 \setotherlanguage{english}
 
-% تعيين الخطوط (تأكد من وجود هذه الخطوط على جهازك أو استبدلها بخطوط تدعم العربية)
+% تعيين خطوط تدعم العربية بشكل كامل
 \newfontfamily\arabicfont[Script=Arabic,Scale=1.1]{Amiri}
-\newfontfamily\arabicfontsf[Script=Arabic,Scale=1.1]{Traditional Arabic}
+\newfontfamily\arabicfontsf[Script=Arabic,Scale=1.1]{Amiri}
+\newfontfamily\arabicfonttt[Script=Arabic,Scale=0.9]{Amiri} % لحل مشكلة الخطوط أحادية المسافة في الأكواد
 
-% حزم التنسيق الرياضي والأكواد
+% حزم التنسيق الرياضي والأكواد والتصميم
 \usepackage{amsmath}
 \usepackage{amssymb}
-\usepackage{listings}
-\usepackage{xcolor}
 \usepackage{geometry}
 \usepackage{hyperref}
+\usepackage{xcolor}
+
+% حزمة احترافية متطورة لعرض الأكواد البرمجية دون تداخل النص العربي
+\usepackage[most]{tcolorbox}
+\tcbuselibrary{listings}
 
 \geometry{margin=1in}
 
-% تنسيق إظهار أكواد الـ HTML
-\lstset{
-    language=HTML,
-    basicstyle=\small\ttfamily,
-    backgroundcolor=\color{gray!10},
-    frame=single,
-    tabsize=2,
-    rulecolor=\color{gray!30},
-    breaklines=true,
-    columns=fullflexible,
-    xleftmargin=15pt,
-    xrightmargin=15pt
+% تعريف ستايل مخصص ومستقر للأكواد البرمجية (HTML)
+\newtcblisting{htmlcode}{
+    arc=3mm,
+    commandsep=0pt,
+    boxrule=0.5pt,
+    colback=gray!5,
+    colframe=gray!30,
+    listing only,
+    listing options={
+        language=HTML,
+        basicstyle=\small\ttfamily,
+        breaklines=true,
+        tabsize=2,
+        columns=fullflexible
+    },
+    every listing line={\setRTL} % يضمن بقاء اتجاه الأكواد سليماً في بيئة المراجعة
 }
+
+% اختصار آمن لكتابة الأكواد المدمجة بالنص دون كسر الاتجاه
+\newcommand{\codeinline}[1]{\lr{\texttt{#1}}}
 
 \title{\textbf{المنهج الشامل لتفكيك ولتعلم لغة HTML}}
 \author{إعداد المساعد الذكي بناءً على دليل freeCodeCamp}
@@ -41,6 +52,7 @@
 \begin{document}
 
 \maketitle
+\newpage
 \tableofcontents
 \newpage
 
@@ -61,15 +73,15 @@
 $$\text{Element} = \text{[Opening Tag]} + \text{Content} + \text{[Closing Tag]}$$
 
 \begin{itemize}
-    \item \textbf{وسم البداية (Opening Tag):} نكتب اسم التاج بين علامتي أصغر من وأكبر من \lstinline|<tag>|.
+    \item \textbf{وسم البداية (Opening Tag):} نكتب اسم التاج بين علامتي أصغر من وأكبر من \codeinline{<tag>}.
     \item \textbf{المحتوى (Content):} الكلام أو الشيء الذي تريد إظهاره للمستخدم.
-    \item \textbf{وسم النهاية (Closing Tag):} نفس وسم البداية تماماً ولكن نضيف شرطة مائلة \lstinline|</tag>| لتنبيه المتصفح أن الصندوق قد أُغلق هنا.
+    \item \textbf{وسم النهاية (Closing Tag):} نفس وسم البداية تماماً ولكن نضيف شرطة مائلة \codeinline{</tag>} لتنبيه المتصفح أن الصندوق قد أُغلق هنا.
 \end{itemize}
 
 \subsection{4. التطبيق بمثال تفصيلي}
 كود البنية الأساسية للصفحة:
 
-\begin{lstlisting}
+\begin{htmlcode}
 <!DOCTYPE html>
 <html>
   <head>
@@ -80,21 +92,21 @@ $$\text{Element} = \text{[Opening Tag]} + \text{Content} + \text{[Closing Tag]}$
     <p>هذا السطر عبارة عن فقرة نصية عادية جداً.</p>
   </body>
 </html>
-\end{lstlisting}
+\end{htmlcode}
 
 \subsubsection*{شرح كل جزء (Tag) بالتفصيل:}
 \begin{description}
-    \item[\lstinline|<!DOCTYPE html>|] هذا ليس تاًج بالمعنى الحرفي، بل هو إشعار للمتصفح نقول له فيه: ``انتبه، نحن نستخدم أحدث إصدار من لغة HTML (وهو HTML5)''.
-    \item[\lstinline|<html>| و \lstinline|</html>|] هذا هو الصندوق الأكبر (الأب). كل أكواد الصفحة يجب أن تعيش داخل هذا التاج.
-    \item[\lstinline|<head>| و \lstinline|</head>|] (رأس الصفحة) هذا الصندوق مخصص لأشياء خلف الكواليس، مثل عنوان الصفحة الذي يظهر في التبويب، ولا يظهر محتواه داخل الصفحة نفسها.
-    \item[\lstinline|<title>| و \lstinline|</title>|] يوضع داخل الـ \text{head} ليكتب اسم الموقع في شريط المتصفح من الأعلى.
-    \item[\lstinline|<body>| و \lstinline|</body>|] (جسم الصفحة) هذا هو الصندوق السحري. أي شيء تكتبه هنا هو ما يراه المستخدم بعينه داخل الموقع.
-    \item[\lstinline|<h1>| و \lstinline|</h1>|] حرف الـ H اختصار لكلمة Heading (عنوان). والرقم 1 يعني أنه العنوان الأكبر والأهم في الصفحة.
-    \item[\lstinline|<p>| و \lstinline|</p>|] حرف الـ P اختصار لكلمة Paragraph (فقرة). نستخدمه عندما نريد كتابة أسطر نصية عادية.
+    \item[\codeinline{<!DOCTYPE html>}] هذا ليس تاًج بالمعنى الحرفي، بل هو إشعار للمتصفح نقول له فيه: ``انتبه، نحن نستخدم أحدث إصدار من لغة HTML (وهو HTML5)''.
+    \item[\codeinline{<html>} و \codeinline{</html>}] هذا هو الصندوق الأكبر (الأب). كل أكواد الصفحة يجب أن تعيش داخل هذا التاج.
+    \item[\codeinline{<head>} و \codeinline{</head>}] (رأس الصفحة) هذا الصندوق مخصص لأشياء خلف الكواليس، مثل عنوان الصفحة الذي يظهر في التبويب، ولا يظهر محتواه داخل الصفحة نفسها.
+    \item[\codeinline{<title>} و \codeinline{</title>}] يوضع داخل الـ $\text{head}$ ليكتب اسم الموقع في شريط المتصفح من الأعلى.
+    \item[\codeinline{<body>} و \codeinline{</body>}] (جسم الصفحة) هذا هو الصندوق السحري. أي شيء تكتبه هنا هو ما يراه المستخدم بعينه داخل الموقع.
+    \item[\codeinline{<h1>} و \codeinline{</h1>}] حرف الـ H اختصار لكلمة Heading (عنوان). والرقم 1 يعني أنه العنوان الأكبر والأهم في الصفحة.
+    \item[\codeinline{<p>} و \codeinline{</p>}] حرف الـ P اختصار لكلمة Paragraph (فقرة). نستخدمه عندما نريد كتابة أسطر نصية عادية.
 \end{description}
 
 \subsection{5. التحدي (Task 1)}
-افتح برنامج VS Code، واكتب الأكواد السابقة بنفسك. قم بتغيير النص الذي بين \lstinline|<h1>| و \lstinline|</h1>| واكتب اسمك الثنائي، وتأكد من إغلاق كل تاج فتحته بالشرطة المائلة \lstinline|/|. احفظ الملف باسم \texttt{index.html} وافتحه بالمتصفح لترى النتيجة.
+افتح برنامج VS Code، واكتب الأكواد السابقة بنفسك. قم بتغيير النص الذي بين \codeinline{<h1>} و \codeinline{</h1>} واكتب اسمك الثنائي، وتأكد من إغلاق كل تاج فتحته بالشرطة المائلة \codeinline{/}. احفظ الملف باسم \texttt{index.html} وافتحه بالمتصفح لترى النتيجة.
 
 \newpage
 
@@ -113,19 +125,19 @@ $$\text{Tag with Attribute} = \langle\text{tag\_name} \quad \mathbf{\text{attrib
 
 \subsection{4. التطبيق بمثال تفصيلي}
 
-\begin{lstlisting}
+\begin{htmlcode}
 <a href="https://www.google.com">اضغط هنا للانتقال لجوجل</a>
 
 <img src="my-photo.jpg" alt="صورتي الشخصية">
-\end{lstlisting}
+\end{htmlcode}
 
 \subsubsection*{شرح التاجات والخصائص الجديدة:}
 \begin{description}
-    \item[\lstinline|<a>| و \lstinline|</a>|] اختصار لكلمة Anchor (مَرسَاة)، وهو التاج المسؤول عن صنع الروابط.
-    \item[\lstinline|href=""|] هذه هي الخاصية (Attribute) واختصار لـ Hypertext Reference. نكتب بين العلامتين الرابط الذي نريد الذهاب إليه.
-    \item[\lstinline|<img>|] اختصار لكلمة Image (صورة). هذا التاج فريد من نوعه، ليس له وسم إغلاق لأنه لا يحتوي على نص بداخله، ويسمى (Self-closing tag).
-    \item[\lstinline|src=""|] اختصار لـ Source (المصدر). نكتب داخلها مسار الصورة أو رابطها على الإنترنت لتظهر في الموقع.
-    \item[\lstinline|alt=""|] اختصار لـ Alternative Text (النص البديل)، يظهر إذا لم تتحمل الصورة لشرح محتواها.
+    \item[\codeinline{<a>} و \codeinline{</a>}] اختصار لكلمة Anchor (مَرسَاة)، وهو التاج المسؤول عن صنع الروابط.
+    \item[\codeinline{href=""}] هذه هي الخاصية (Attribute) واختصار لـ Hypertext Reference. نكتب بين العلامتين الرابط الذي نريد الذهاب إليه.
+    \item[\codeinline{<img>}] اختصار لكلمة Image (صورة). هذا التاج فريد من نوعه، ليس له وسم إغلاق لأنه لا يحتوي على نص بداخله، ويسمى (Self-closing tag).
+    \item[\codeinline{src=""}] اختصار لـ Source (المصدر). نكتب داخلها مسار الصورة أو رابطها على الإنترنت لتظهر في الموقع.
+    \item[\codeinline{alt=""}] اختصار لـ Alternative Text (النص البديل)، يظهر إذا لم تتحمل الصورة لشرح محتواها.
 \end{description}
 
 \subsection{5. التحدي (Task 2)}
@@ -139,16 +151,16 @@ $$\text{Tag with Attribute} = \langle\text{tag\_name} \quad \mathbf{\text{attrib
 الموقع الاحترافي ليس مجرد صفحات تقرأها وتتنقل بينها، بل هو موقع يتفاعل معك. عندما تسجل دخولك في فيسبوك، أنت تستخدم ``نموذجاً'' (Form). في هذا المستوى نتعلم كيف نجعل المستخدم يكتب بياناته ويرسلها إلينا، وكيف ننظم الصفحة مثل المواقع العالمية الكبرى لتفهمها محركات البحث (SEO).
 
 \subsection{2. الفكرة الفيزيائية والظاهرية}
-النموذج (\lstinline|<form>|) فيزيائياً يشبه ``استمارة الورق الحكومية'' التي تحتوي على خانات فارغة ومربعات لتضع فيها علامة صح. المستخدم يملأ هذه الخانات، وعندما يضغط على زر ``إرسال''، يتم تجميع كل هذه الأوراق في مظروف واحد مشفر ويتحرك عبر أسلاك الإنترنت متجهاً للسيرفر (الخادم).
+النموذج (\codeinline{<form>}) فيزيائياً يشبه ``استمارة الورق الحكومية'' التي تحتوي على خانات فارغة ومربعات لتضع فيها علامة صح. المستخدم يملأ هذه الخانات، وعندما يضغط على زر ``إرسال''، يتم تجميع كل هذه الأوراق في مظروف واحد مشفر ويتحرك عبر أسلاك الإنترنت متجهاً للسيرفر (الخادم).
 
 \subsection{3. طرق الشرح الهيكلي الرياضي}
-النماذج تعتمد على نظام الحقول المترابطة. كل حقل إدخال يجب أن يكون له اسم برمجى فريد (\lstinline|name|) حتى يعامل رياضياً كمتغير مستقل له قيمة محددة:
+النماذج تعتمد على نظام الحقول المترابطة. كل حقل إدخال يجب أن يكون له اسم برمجى فريد (\codeinline{name}) حتى يعامل رياضياً كمتغير مستقل له قيمة محددة:
 
 $$\text{Data Package} = \{ \text{username}: \text{"Abdelrahman"}, \text{age}: \text{"20"} \}$$
 
 \subsection{4. التطبيق بمثال تفصيلي}
 
-\begin{lstlisting}
+\begin{htmlcode}
 <main>
   <section>
     <h2>إنشاء حساب جديد</h2>
@@ -163,20 +175,20 @@ $$\text{Data Package} = \{ \text{username}: \text{"Abdelrahman"}, \text{age}: \t
     </form>
   </section>
 </main>
-\end{lstlisting}
+\end{htmlcode}
 
 \subsubsection*{شرح التاجات والخصائص الاحترافية:}
 \begin{description}
-    \item[\lstinline|<main>| و \lstinline|</main>|] تاج دلالي (Semantic) يخبر جوجل: ``هنا يقع المحتوى الأساسي والفريد لهذه الصفحة''.
-    \item[\lstinline|<section>| و \lstinline|</section>|] تاج دلالي يعبر عن ``قسم'' أو ``فصل'' معين داخل الصفحة.
-    \item[\lstinline|<form>| و \lstinline|</form>|] الحاوية الكبرى التي تخبر المتصفح أن كل ما بداخلها هو استمارة بحاجة لجمع بياناتها.
-    \item[\lstinline|action=""|] الخاصية التي نحدد فيها عنوان ``السيرفر'' الذي سنرسل له البيانات لتخزينها.
-    \item[\lstinline|<label>|] النص الذي يكتب بجانب مربع الإدخال ليعرف المستخدم ماذا سيكتب (مثل: ``اسم المستخدم:'').
-    \item[\lstinline|<input>|] التاج المسؤول عن إظهار مستطيل الكتابة الأبيض. وله خاصية \lstinline|type="text"| ليفهم المتصفح نوع البيانات النصية.
-    \item[\lstinline|<button type="submit">|] الزر السحري الذي يقوم بقراءة الاستمارة وإرسالها فوراً عند الضغط عليه.
+    \item[\codeinline{<main>} و \codeinline{</main>}] تاج دلالي (Semantic) يخبر جوجل: ``هنا يقع المحتوى الأساسي والفريد لهذه الصفحة''.
+    \item[\codeinline{<section>} و \codeinline{</section>}] تاج دلالي يعبر عن ``قسم'' أو ``فصل'' معين داخل الصفحة.
+    \item[\codeinline{<form>} و \codeinline{</form>}] الحاوية الكبرى التي تخبر المتصفح أن كل ما بداخلها هو استمارة بحاجة لجمع بياناتها.
+    \item[\codeinline{action=""}] الخاصية التي نحدد فيها عنوان ``السيرفر'' الذي سنرسل له البيانات لتخزينها.
+    \item[\codeinline{<label>}] النص الذي يكتب بجانب مربع الإدخال ليعرف المستخدم ماذا سيكتب (مثل: ``اسم المستخدم:'').
+    \item[\codeinline{<input>}] التاج المسؤول عن إظهار مستطيل الكتابة الأبيض. وله خاصية \codeinline{type="text"} ليفهم المتصفح نوع البيانات النصية.
+    \item[\codeinline{<button type="submit">}] الزر السحري الذي يقوم بقراءة الاستمارة وإرسالها فوراً عند الضغط عليه.
 \end{description}
 
 \subsection{5. التحدي (Task 3)}
-قم ببناء نموذج ``تسجيل دخول'' حقيقي يحتوي على حقلين: الأول لاسم المستخدم، والثاني لكلمة المرور (ابحث وجرب استخدام \lstinline|type="password"| في حقل كلمة المرور لترى كيف سيقوم المتصفح بتشفير الحروف وتحويلها لنقاط سوداء لحماية الخصوصية!).
+قم ببناء نموذج ``تسجيل دخول'' حقيقي يحتوي على حقلين: الأول لاسم المستخدم، والثاني لكلمة المرور (ابحث وجرب استخدام \codeinline{type="password"} في حقل كلمة المرور لترى كيف سيقوم المتصفح بتشفير الحروف وتحويلها لنقاط سوداء لحماية الخصوصية!).
 
 \end{document}
