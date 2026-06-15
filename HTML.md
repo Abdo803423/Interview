@@ -100,7 +100,7 @@ The foundational architecture of an HTML document is implemented as follows:
 \end{description}
 
 \subsection{5. Practical Lab Task (Task 1)}
-Initialize your local Integrated Development Environment (IDE). Replicate the structural code block block provided above. Modify the contents of the \codeinline{<h1>} container to reflect your full name, verifying that all opened boundaries are strictly closed via a terminal forward slash (\codeinline{/}). Persist the document to disk as \texttt{index.html} and execute it inside a browser engine to evaluate the compiled layout.
+Initialize your local Integrated Development Environment (IDE). Replicate the structural code block provided above. Modify the contents of the \codeinline{<h1>} container to reflect your full name, verifying that all opened boundaries are strictly closed via a terminal forward slash (\codeinline{/}). Persist the document to disk as \texttt{index.html} and execute it inside a browser engine to evaluate the compiled layout.
 
 \newpage
 
@@ -120,7 +120,7 @@ $$\text{Tag with Attribute} = \langle\text{tag\_name} \quad \mathbf{\text{attrib
 \subsection{4. Practical Implementation Suite}
 
 \begin{htmlcode}
-<a href="[https://www.google.com](https://www.google.com)">Execute Secure Route to Google</a>
+<a href="https://www.google.com">Execute Secure Route to Google</a>
 
 <img src="user-profile.jpg" alt="User Vector Profile Alignment">
 \end{htmlcode}
