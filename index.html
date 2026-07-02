@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backend Interview Bootcamp — Premium Simulator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <audio id="snd-success" src="https://assets.mixkit.co/active_storage/sfx/2019/2019-84.wav" preload="auto"></audio>
+    <audio id="snd-fail" src="https://assets.mixkit.co/active_storage/sfx/2514/2514-84.wav" preload="auto"></audio>
+    <audio id="snd-click" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-84.wav" preload="auto"></audio>
+
+    <header class="app-header">
+        <div class="header-container">
+            <div class="logo-group" id="btn-header-home">
+                <span class="logo-icon">☕</span>
+                <div class="logo-text">
+                    <h1>Backend Interview Bootcamp</h1>
+                    <span class="logo-sub">Engineered for Spring & Java Masters</span>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button id="theme-toggle" class="btn-icon" aria-label="Toggle Theme">
+                    <svg class="sun-icon" viewBox="0 0 24 24"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0s-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41l-1.06-1.06zm1.06-12.37c-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06c.39-.38.39-1.02 0-1.41zm-12.37 12.37l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06c.39-.39.39-1.03 0-1.41z"/></svg>
+                    <svg class="moon-icon" viewBox="0 0 24 24"><path d="M12.3 22h-.1c-5.5 0-10-4.5-10-10 0-4.8 3.5-8.9 8.2-9.8.6-.1 1.2.3 1.3.9.1.6-.2 1.2-.8 1.4-2.8 1-4.7 3.7-4.7 6.8 0 4.1 3.4 7.5 7.5 7.5 3.1 0 5.8-1.9 6.8-4.7.2-.6.8-.9 1.4-.8.6.1 1 .7.9 1.3C21.2 18.5 17.1 22 12.3 22z"/></svg>
+                </button>
+                <button id="btn-reset-app" class="btn btn-secondary btn-sm">Reset Progress</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-viewport">
+        <section id="screen-dashboard" class="app-screen">
+            <div class="dashboard-grid-layout">
+                <aside class="dashboard-sidebar card-glass">
+                    <h3>Performance Analytics</h3>
+                    <div class="metric-circle-container">
+                        <svg class="circular-progress" viewBox="0 0 100 100">
+                            <circle class="bg" cx="50" cy="50" r="45"></circle>
+                            <circle class="prog" id="dash-circle-pct" cx="50" cy="50" r="45"></circle>
+                        </svg>
+                        <div class="circle-inner">
+                            <span id="dash-text-pct">0%</span>
+                            <small>Global Completion</small>
+                        </div>
+                    </div>
+                    <div class="analytics-metrics-list">
+                        <div class="metric-row"><span>Overall Score</span><strong id="stat-overall-score">0 / 0</strong></div>
+                        <div class="metric-row"><span>Average Accuracy</span><strong id="stat-avg-accuracy">0%</strong></div>
+                        <div class="metric-row"><span>Completed Interviews</span><strong id="stat-completed-count">0 / 10</strong></div>
+                    </div>
+                    <div class="achievements-box">
+                        <h4>Earned Badges</h4>
+                        <div id="dashboard-badges" class="badges-flex"></div>
+                    </div>
+                </aside>
+
+                <div class="dashboard-main-content">
+                    <div class="section-title-container">
+                        <h2>Technical Interview Roadmap</h2>
+                        <p>Complete each interview milestone to unlock successive advanced levels.</p>
+                    </div>
+                    <div class="interviews-grid" id="interviews-container"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="screen-exam" class="app-screen hidden">
+            <div class="exam-workspace">
+                <div class="exam-sticky-header card-glass">
+                    <div class="exam-info-meta">
+                        <button id="exam-back-home" class="btn-text">← Exit to Dashboard</button>
+                        <h2 id="exam-title-name">Interview Engine</h2>
+                        <div class="tag" id="exam-difficulty-badge">Easy</div>
+                    </div>
+                    <div class="exam-realtime-metrics">
+                        <div class="metric-block" id="exam-timer-wrapper">
+                            <span class="label">Time Remaining</span>
+                            <span class="val font-mono" id="exam-timer-clock">00:00</span>
+                        </div>
+                        <div class="metric-block">
+                            <span class="label">Progress Indicator</span>
+                            <span class="val" id="exam-progress-counter">Q 1 / 42</span>
+                        </div>
+                    </div>
+                    <div class="progress-bar-track">
+                        <div class="progress-bar-fill" id="exam-progress-bar"></div>
+                    </div>
+                </div>
+
+                <div class="exam-body-layout">
+                    <aside class="exam-navigator-panel card-glass">
+                        <h3>Question Navigator</h3>
+                        <div id="navigator-grid" class="navigator-grid"></div>
+                        <div class="navigator-legend">
+                            <div><span class="dot done"></span>Answered</div>
+                            <div><span class="dot review"></span>Review</div>
+                            <div><span class="dot current"></span>Current</div>
+                        </div>
+                    </aside>
+
+                    <div class="exam-question-viewport card-glass">
+                        <div class="question-header">
+                            <span class="category-badge" id="question-category-lbl">Topic: Core</span>
+                            <button id="btn-mark-review" class="btn btn-secondary btn-sm">⭐ Mark for Review</button>
+                        </div>
+
+                        <div id="active-question-wrapper" class="active-question-wrapper"></div>
+
+                        <div class="exam-actions-panel">
+                            <button id="btn-prev-q" class="btn btn-secondary">Previous Question</button>
+                            <button id="btn-next-q" class="btn btn-primary">Next Question</button>
+                            <button id="btn-submit-exam" class="btn btn-danger hidden">Finalize & Submit Interview</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="screen-report" class="app-screen hidden">
+            <div class="report-max-container">
+                <div class="report-header-actions">
+                    <button id="report-back-home" class="btn btn-secondary">← Back to Dashboard</button>
+                    <div class="action-group">
+                        <button id="btn-print-report" class="btn btn-primary">Print Formal Ticket</button>
+                        <button id="btn-download-json" class="btn btn-secondary">Download Export Audit</button>
+                    </div>
+                </div>
+
+                <div id="report-ticket-target"></div>
+                <div class="review-explorer-section">
+                    <div class="explorer-header card-glass">
+                        <h3>Detailed Examination Explorer & Review Analysis</h3>
+                        <div class="filter-controls">
+                            <input type="text" id="review-search-input" placeholder="Search questions or keywords...">
+                            <select id="review-filter-topic">
+                                <option value="ALL">All Categories</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="review-questions-feed" class="review-questions-feed"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="utils.js"></script>
+    <script src="questions.js"></script>
+    <script src="data.js"></script>
+    <script src="storage.js"></script>
+    <script src="theme.js"></script>
+    <script src="report.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
